@@ -1,0 +1,10 @@
+{
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "/usr/include",
+        "/usr/local/include",
+        "/usr/src/linux-headers-5.8.0-55-88/include",
+        "/usr/src/linux-headers-5.8.0-55-88-generic/include",
+        "/usr/src/linux-headers-5.8.0-55-88/arch/x86/include",
+        "/usr/lib/gcc/x86_64-linux-gnu/9/include"]
+}

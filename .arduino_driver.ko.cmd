@@ -1,1 +1,0 @@
-cmd_/home/daniel/Documents/DRVO/arduino_driver/arduino_driver.ko := arm-linux-gnueabi-ld -r  -EL -T ./scripts/module-common.lds -T ./arch/arm/kernel/module.lds  --build-id  -o /home/daniel/Documents/DRVO/arduino_driver/arduino_driver.ko /home/daniel/Documents/DRVO/arduino_driver/arduino_driver.o /home/daniel/Documents/DRVO/arduino_driver/arduino_driver.mod.o ;  true

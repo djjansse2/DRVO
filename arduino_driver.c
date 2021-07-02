@@ -56,25 +56,25 @@ module_exit(arduino_driver_exit);
 
 static int __init arduino_driver_init(void)
 {
-    u32 buffer = 0x00;
+    // u32 buffer = 0x00;
 
     printk(KERN_ALERT "Initializing Arduino Driver\n");
 
-    struct i2c_adapter* arduino_i2c_adapter = i2c_get_adapter(2);
+    // struct i2c_adapter* arduino_i2c_adapter = i2c_get_adapter(2);
 
-    struct device_node* i2c2_node = arduino_i2c_adapter->dev.of_node;
-    struct device_node* arduino_node = of_find_node_by_name(i2c2_node, "arduino_driver");
+    // struct device_node* i2c2_node = arduino_i2c_adapter->dev.of_node;
+    // struct device_node* arduino_node = of_find_node_by_name(i2c2_node, "arduino_driver");
 
-    printk(KERN_ALERT "%u\n", i2c2_node);
+    // printk(KERN_ALERT "%u\n", i2c2_node);
 
-    of_property_read_u32(arduino_node, "i2c-address", &buffer);
+    // of_property_read_u32(arduino_node, "i2c-address", &buffer);
 
-    struct i2c_board_info arduino_i2c_board_info = {
-        .type = "arduino_driver",
-        .addr = buffer,
-    };
+    // struct i2c_board_info arduino_i2c_board_info = {
+    //     .type = "arduino_driver",
+    //     .addr = buffer,
+    // };
 
-    i2c_new_device(arduino_i2c_adapter, &arduino_i2c_board_info);
+    // i2c_new_device(arduino_i2c_adapter, &arduino_i2c_board_info);
     i2c_add_driver(&i2c_driver);
 
     return 0;
@@ -85,16 +85,14 @@ static void __exit arduino_driver_exit(void)
     printk(KERN_ALERT "Exiting Arduino Driver\n");
 
     i2c_del_driver(&i2c_driver);
-    i2c_unregister_device(arduino_i2c_client);
+    // i2c_unregister_device(arduino_i2c_client);
 }
 
 static int arduino_driver_probe(struct i2c_client* client, const struct i2c_device_id* id)
 {
+    arduino_i2c_client = client;
     printk(KERN_ALERT "Creating File\n");
-
-    driver_create_file(&(i2c_driver.driver), &arduino_attribute);
-    
-    return 0;
+    return driver_create_file(&(i2c_driver.driver), &arduino_attribute);
 }
 
 static int arduino_driver_remove(struct i2c_client* client)

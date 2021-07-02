@@ -89,6 +89,9 @@ static int arduino_driver_remove(struct i2c_client* client)
 
 static ssize_t store_arduino(struct device_driver* device, const char* buffer, size_t size)
 {
+    if (arduino_i2c_client == NULL)
+        return -1;
+        
     printk(KERN_ALERT "Writing To I2C\n");
     i2c_master_send(arduino_i2c_client, buffer, size);
     return size;
@@ -96,6 +99,9 @@ static ssize_t store_arduino(struct device_driver* device, const char* buffer, s
 
 static ssize_t show_arduino(struct device_driver* device, char* buffer)
 {
+    if (arduino_i2c_client == NULL)
+        return -1;
+    
     printk(KERN_ALERT "Reading From I2C\n");
     i2c_master_recv(arduino_i2c_client, buffer, 13);
     printk(KERN_ALERT "Read: %s\n", buffer);

@@ -14,6 +14,7 @@ static int arduino_driver_probe(struct i2c_client*, const struct i2c_device_id*)
 static int arduino_driver_remove(struct i2c_client*);
 
 static ssize_t store_arduino(struct device_driver* device, const char* buffer, size_t size);
+static ssize_t show_arduino(struct device_driver* device, char* buffer);
 
 static struct i2c_client *arduino_i2c_client = NULL;
 
@@ -43,7 +44,7 @@ static struct i2c_driver i2c_driver = {
 };
 
 struct driver_attribute arduino_attribute = {
-    .show = NULL,
+    .show = show_arduino,
     .store = store_arduino,
     .attr = {
         .name = "arduino",
@@ -56,25 +57,8 @@ module_exit(arduino_driver_exit);
 
 static int __init arduino_driver_init(void)
 {
-    // u32 buffer = 0x00;
-
     printk(KERN_ALERT "Initializing Arduino Driver\n");
 
-    // struct i2c_adapter* arduino_i2c_adapter = i2c_get_adapter(2);
-
-    // struct device_node* i2c2_node = arduino_i2c_adapter->dev.of_node;
-    // struct device_node* arduino_node = of_find_node_by_name(i2c2_node, "arduino_driver");
-
-    // printk(KERN_ALERT "%u\n", i2c2_node);
-
-    // of_property_read_u32(arduino_node, "i2c-address", &buffer);
-
-    // struct i2c_board_info arduino_i2c_board_info = {
-    //     .type = "arduino_driver",
-    //     .addr = buffer,
-    // };
-
-    // i2c_new_device(arduino_i2c_adapter, &arduino_i2c_board_info);
     i2c_add_driver(&i2c_driver);
 
     return 0;
@@ -85,7 +69,6 @@ static void __exit arduino_driver_exit(void)
     printk(KERN_ALERT "Exiting Arduino Driver\n");
 
     i2c_del_driver(&i2c_driver);
-    // i2c_unregister_device(arduino_i2c_client);
 }
 
 static int arduino_driver_probe(struct i2c_client* client, const struct i2c_device_id* id)
@@ -109,4 +92,12 @@ static ssize_t store_arduino(struct device_driver* device, const char* buffer, s
     printk(KERN_ALERT "Writing To I2C\n");
     i2c_master_send(arduino_i2c_client, buffer, size);
     return size;
+}
+
+static ssize_t show_arduino(struct device_driver* device, char* buffer)
+{
+    printk(KERN_ALERT "Reading From I2C\n");
+    i2c_master_recv(arduino_i2c_client, buffer, 13);
+    printk(KERN_ALERT "Read: %s\n", buffer);
+    return 0;
 }
